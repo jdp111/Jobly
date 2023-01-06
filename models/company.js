@@ -63,44 +63,38 @@ class Company {
 
   /** Sorts all companies by query parameters
    * 
-   * takes input sorters from query strings
+   * first input sorters from query strings
    *   ex. {"name":"apple","minSort":1, "maxSort":5}
+   * 
+   * second input all companies from "finAll()"
    * 
    * returns list of companies filtered by query strings
    * 
    */
-  static async sortAll(sorters){
-    let nameSort = "%%";
-    let minSort = "0";
-    let maxSort = "999999999";
-    if(!parseInt(sorters.minEmployees) && sorters.minEmployees){ throw UnauthorizedError('minEmployees query must be a number')}
-    if(!parseInt(sorters.maxEmployees) && sorters.maxEmployees){ throw UnauthorizedError('maxEmployees query must be a number')}
+  static async sortAll(sorters, allCompanies){
+    if(!parseInt(sorters.minEmployees) && sorters.minEmployees){ throw new UnauthorizedError('minEmployees query must be a number')}
+    if(!parseInt(sorters.maxEmployees) && sorters.maxEmployees){ throw new UnauthorizedError('maxEmployees query must be a number')}
     if (parseInt(sorters.minEmployees) > parseInt(sorters.maxEmployees)){
       throw new BadRequestError('minEmployees must be less than maxEmployees')
     }
-    
-    if (sorters.name){nameSort = `%${sorters.name}%`}
-    if (sorters.minEmployees){minSort = `${sorters.minEmployees}`}
-    if (sorters.maxEmployees){maxSort = `${sorters.maxEmployees}`}
+    let sortedCompanies = allCompanies
 
-    const sortedCompanies = await db.query(
-      `SELECT handle,
-          name,
-          description,
-          num_employees AS "numEmployees",
-          logo_url AS "logoUrl"
-      FROM companies
-      WHERE name LIKE $1
-      AND num_Employees >= $2
-      AND num_Employees <= $3
-      ORDER BY name;`,
-      [nameSort, minSort, maxSort]
-    )
-    if (!sortedCompanies.rows[0]){
+    if (sorters.name){
+      sortedCompanies = sortedCompanies.filter((x) =>x.name.includes(sorters.name) )}
+
+    if (sorters.minEmployees){
+      sortedCompanies = sortedCompanies.filter((x)=>x.numEmployees >= sorters.minEmployees)
+    }
+    
+    if (sorters.maxEmployees){
+      sortedCompanies = sortedCompanies.filter((x)=>x.numEmployees <= sorters.maxEmployees)
+    }
+
+    if (!sortedCompanies[0]){
       return {"message":"no results found"}
     }
     
-    return sortedCompanies.rows;
+    return sortedCompanies;
   }
 
 

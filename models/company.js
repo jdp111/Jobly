@@ -78,16 +78,15 @@ class Company {
     if (sorters.name){
       sortedCompanies = sortedCompanies.filter((x) =>x.name.includes(sorters.name) )
     }
-    console.log(sortedCompanies)
 
     if (sorters.minEmployees){
       sortedCompanies = sortedCompanies.filter((x)=>parseInt(x.numEmployees) >= sorters.minEmployees)
     }
-    console.log(sortedCompanies)
+    
     if (sorters.maxEmployees){
       sortedCompanies = sortedCompanies.filter((x)=>parseInt(x.numEmployees) <= sorters.maxEmployees)
     }
-    console.log(sortedCompanies)
+
     if (!sortedCompanies[0]){
       return {"message":"no results found"}
     }

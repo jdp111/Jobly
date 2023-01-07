@@ -11,6 +11,7 @@ const {
   commonAfterEach,
   commonAfterAll,
   u1Token,
+  u2Token,
 } = require("./_testCommon");
 
 beforeAll(commonBeforeAll);
@@ -29,7 +30,7 @@ describe("POST /companies", function () {
     numEmployees: 10,
   };
 
-  test("ok for users", async function () {
+  test("ok for admins", async function () {
     const resp = await request(app)
         .post("/companies")
         .send(newCompany)
@@ -37,6 +38,17 @@ describe("POST /companies", function () {
     expect(resp.statusCode).toEqual(201);
     expect(resp.body).toEqual({
       company: newCompany,
+    });
+  });
+
+  test("unauth for non-admin users", async function () {
+    const resp = await request(app)
+        .post("/companies")
+        .send(newCompany)
+        .set("authorization", `Bearer ${u2Token}`);
+    expect(resp.statusCode).toEqual(401);
+    expect(resp.body.error).toEqual({
+      "message": "Unauthorized", "status":401
     });
   });
 
@@ -198,6 +210,18 @@ describe("PATCH /companies/:handle", function () {
     });
   });
 
+  test("unauth for not admin", async function (){
+    const resp = await request(app)
+        .patch(`/companies/c1`)
+        .send({
+          name: "C1-new",
+        })
+        .set("authorization", `Bearer ${u2Token}`);
+    expect(resp.body.error).toEqual({
+      "message": "Unauthorized", "status": 401
+    });
+  });
+
   test("unauth for anon", async function () {
     const resp = await request(app)
         .patch(`/companies/c1`)
@@ -241,6 +265,13 @@ describe("PATCH /companies/:handle", function () {
 /************************************** DELETE /companies/:handle */
 
 describe("DELETE /companies/:handle", function () {
+  test("unauthorized for user", async function (){
+    const resp = await request(app)
+        .delete(`/companies/c1`)
+        .set("authorization", `Bearer ${u2Token}`);
+    expect(resp.body.error).toEqual({"message":"Unauthorized", "status":401});
+  });
+  
   test("works for users", async function () {
     const resp = await request(app)
         .delete(`/companies/c1`)
@@ -260,4 +291,7 @@ describe("DELETE /companies/:handle", function () {
         .set("authorization", `Bearer ${u1Token}`);
     expect(resp.statusCode).toEqual(404);
   });
+
+  
+
 });

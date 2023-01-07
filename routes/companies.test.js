@@ -117,6 +117,11 @@ describe("GET /companies", function () {
     expect(resp.text).toEqual("{\"error\":{\"message\":\"minEmployees must be less than maxEmployees\",\"status\":400}}")
   })
 
+  test("unauthorized sorter", async function(){
+    const resp = await request(app).get("/companies?name=C2&minEmployees=3&maxEmployees=2&cred=2")
+    expect(resp.text).toEqual("{\"error\":{\"message\":[\"instance additionalProperty \\\"cred\\\" exists in instance when not allowed\"],\"status\":400}}")
+  })
+
   test("no results", async function() {
     const resp = await request(app).get("/companies?name=C2&minEmployees=5&maxEmployees=5")
     expect(resp.body.companies).toEqual({

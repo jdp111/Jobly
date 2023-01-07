@@ -71,29 +71,27 @@ class Company {
    * returns list of companies filtered by query strings
    * 
    */
-  static async sortAll(sorters, allCompanies){
-    if(!parseInt(sorters.minEmployees) && sorters.minEmployees){ throw new UnauthorizedError('minEmployees query must be a number')}
-    if(!parseInt(sorters.maxEmployees) && sorters.maxEmployees){ throw new UnauthorizedError('maxEmployees query must be a number')}
-    if (parseInt(sorters.minEmployees) > parseInt(sorters.maxEmployees)){
-      throw new BadRequestError('minEmployees must be less than maxEmployees')
-    }
+  static sortAll(sorters, allCompanies){
+
     let sortedCompanies = allCompanies
 
     if (sorters.name){
-      sortedCompanies = sortedCompanies.filter((x) =>x.name.includes(sorters.name) )}
+      sortedCompanies = sortedCompanies.filter((x) =>x.name.includes(sorters.name) )
+    }
+    console.log(sortedCompanies)
 
     if (sorters.minEmployees){
-      sortedCompanies = sortedCompanies.filter((x)=>x.numEmployees >= sorters.minEmployees)
+      sortedCompanies = sortedCompanies.filter((x)=>parseInt(x.numEmployees) >= sorters.minEmployees)
     }
-    
+    console.log(sortedCompanies)
     if (sorters.maxEmployees){
-      sortedCompanies = sortedCompanies.filter((x)=>x.numEmployees <= sorters.maxEmployees)
+      sortedCompanies = sortedCompanies.filter((x)=>parseInt(x.numEmployees) <= sorters.maxEmployees)
     }
-
+    console.log(sortedCompanies)
     if (!sortedCompanies[0]){
       return {"message":"no results found"}
     }
-    
+
     return sortedCompanies;
   }
 

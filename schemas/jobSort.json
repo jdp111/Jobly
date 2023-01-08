@@ -3,20 +3,20 @@
     "$id": "http://our.company.com/companyNew.schema.json",
     "type": "object",
     "properties": {
-      "name": {
+      "title": {
         "type": "string",
         "minLength": 1,
         "maxLength": 30
       },
       
-      "minEmployees": {
+      "minSalary": {
         "type": "string",
-        "pattern": "[0-9]{1,11}"
+        "pattern":"[0-9]{1,}"
       },
 
-      "maxEmployees": {
+      "hasEquity": {
         "type": "string",
-        "pattern": "[0-9]{1,11}"
+        "pattern": "false|true"
       }
      
     },

@@ -75,16 +75,18 @@ class Company {
 
     let sortedCompanies = allCompanies
 
+    
+    
     if (sorters.name){
-      sortedCompanies = sortedCompanies.filter((x) =>x.name.includes(sorters.name) )
+      sortedCompanies = sortedCompanies.filter((x) =>x.name.toLowerCase().includes(sorters.name.toLowerCase()) )
     }
 
     if (sorters.minEmployees){
-      sortedCompanies = sortedCompanies.filter((x)=>parseInt(x.numEmployees) >= sorters.minEmployees)
+      sortedCompanies = sortedCompanies.filter((x)=>parseInt(x.numEmployees) >= parseInt(sorters.minEmployees))
     }
     
     if (sorters.maxEmployees){
-      sortedCompanies = sortedCompanies.filter((x)=>parseInt(x.numEmployees) <= sorters.maxEmployees)
+      sortedCompanies = sortedCompanies.filter((x)=>parseInt(x.numEmployees) <= parseInt(sorters.maxEmployees))
     }
 
     if (!sortedCompanies[0]){

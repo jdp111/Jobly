@@ -9,12 +9,12 @@
         "maxLength": 30
       },
       "salary": {
-        "type": "integer",
-        "minimum": 0
+        "type": "string",
+        "pattern":"[0-9]{1,}$"
       },
       "equity": {
         "type": "string",
-        "pattern": "[0]{1}.?[0-9]{0,1}"
+        "pattern": "[0]{1}.?[0-9]{0,1}$"
       },
       "companyHandle": {
         "type": "string",

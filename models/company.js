@@ -123,6 +123,18 @@ class Company {
     return company;
   }
 
+  static async companyJobs(handle){
+    const jobRes = await db.query(
+      `SELECT jobs.id, jobs.title, jobs.salary, jobs.equity 
+       FROM jobs 
+       INNER JOIN companies ON companies.handle=jobs.company_handle
+       WHERE companies.handle = $1;
+      `,[handle]);
+
+    const jobs = jobRes.rows;
+    return jobs
+  }
+
 
 
 

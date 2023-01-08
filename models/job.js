@@ -70,7 +70,7 @@ class Job{
    * 
    */
   static sortAll(sorters, allJobs){
-
+    console.log("sorting initiated")
     let sortedJobs = allJobs
     
 
@@ -79,7 +79,8 @@ class Job{
     }
     
     if (sorters.minSalary){
-        sortedJobs = sortedJobs.filter((x)=>parseInt(x.minSalary) >= parseInt(sorters.minSalary))
+      console.log(parseInt(sorters.minSalary))
+        sortedJobs = sortedJobs.filter((x)=>parseInt(x.salary) >= parseInt(sorters.minSalary))
     }
 
     if (sorters.hasEquity == "true"){

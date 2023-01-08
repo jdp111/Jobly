@@ -11,12 +11,12 @@
       
       "minSalary": {
         "type": "string",
-        "pattern":"[0-9]{1,}"
+        "pattern":"[0-9]{1,}$"
       },
 
       "hasEquity": {
         "type": "string",
-        "pattern": "false|true"
+        "pattern": "false|true$"
       }
      
     },

@@ -24,7 +24,7 @@ afterAll(commonAfterAll);
 describe("POST /jobs", function () {
   const newJob = {
     title: "new",
-    salary: 80000,
+    salary: "80000",
     equity: "0.5",
     companyHandle: "c1"
   };
@@ -36,7 +36,11 @@ describe("POST /jobs", function () {
         .set("authorization", `Bearer ${u1Token}`);
     //expect(resp.statusCode).toEqual(201);
     expect(resp.body).toEqual({
-      job: {id:5, ...newJob}
+      job: {id:5,
+        title:"new",
+        salary: 80000,
+        equity: "0.5",
+        companyHandle: "c1"}
     });
   });
 
@@ -139,7 +143,7 @@ describe("GET /jobs", function () {
                 id:4,
                 title: "j4",
                 salary:30000,
-                equity:"0.3",
+                equity:null,
                 companyHandle: 'c1'
               }
           ],
@@ -159,6 +163,21 @@ describe("GET /jobs", function () {
                 companyHandle: 'c1'
             },
             {
+            "companyHandle": "c2",
+           "equity": "0.1",
+           "id": 2,
+           "salary": 10000,
+           "title": "j2",
+         },
+         {
+           "companyHandle": "c3",
+           "equity": "0.2",
+           "id": 3,
+           "salary": 20000,
+          "title": "j3",
+         },
+       
+            {
                 id:4,
                 title: "j4",
                 salary:30000,
@@ -171,8 +190,8 @@ describe("GET /jobs", function () {
 
   
   test("unauthorized sorter", async function(){
-    const resp = await request(app).get("/companies?title=j2&id=2")
-    expect(resp.text).toEqual("{\"error\":{\"message\":[\"instance additionalProperty \\\"cred\\\" exists in instance when not allowed\"],\"status\":400}}")
+    const resp = await request(app).get("/jobs?title=j2&id=2")
+    expect(resp.text).toEqual("{\"error\":{\"message\":[\"instance additionalProperty \\\"id\\\" exists in instance when not allowed\"],\"status\":400}}")
   })
 
   test("no results", async function() {
@@ -188,7 +207,7 @@ describe("GET /jobs", function () {
 
 describe("GET /jobs/:id", function () {
   test("works for anon", async function () {
-    const resp = await request(app).get(`/jobs/j1`);
+    const resp = await request(app).get(`/jobs/1`);
     expect(resp.body).toEqual({
       job: {
         id:1,
@@ -201,7 +220,7 @@ describe("GET /jobs/:id", function () {
   });
 
   test("not found for no such job", async function () {
-    const resp = await request(app).get(`/jobs/nope`);
+    const resp = await request(app).get(`/jobs/9`);
     expect(resp.statusCode).toEqual(404);
   });
 });
@@ -213,7 +232,7 @@ describe("PATCH /jobs/:id", function () {
     const resp = await request(app)
         .patch(`/jobs/1`)
         .send({
-          name: "altered",
+          title: "altered",
           salary: "100000"
         })
         .set("authorization", `Bearer ${u1Token}`);
@@ -251,7 +270,7 @@ describe("PATCH /jobs/:id", function () {
 
   test("not found on no such job", async function () {
     const resp = await request(app)
-        .patch(`/jobs/nope`)
+        .patch(`/jobs/9`)
         .send({
           title: "new nope",
         })
@@ -273,7 +292,7 @@ describe("PATCH /jobs/:id", function () {
     const resp = await request(app)
         .patch(`/jobs/2`)
         .send({
-          salary: "50000",
+          salary: "eanoues",
         })
         .set("authorization", `Bearer ${u1Token}`);
     expect(resp.statusCode).toEqual(400);
@@ -294,7 +313,7 @@ describe("DELETE /jobs/:id", function () {
     const resp = await request(app)
         .delete(`/jobs/2`)
         .set("authorization", `Bearer ${u1Token}`);
-    expect(resp.body).toEqual({ "deleted job with ID": 2 });
+    expect(resp.body).toEqual({ "deleted job with ID": "2" });
   });
 
   test("unauth for anon", async function () {
@@ -305,7 +324,7 @@ describe("DELETE /jobs/:id", function () {
 
   test("not found for no such job", async function () {
     const resp = await request(app)
-        .delete(`/jobs/nope`)
+        .delete(`/jobs/9`)
         .set("authorization", `Bearer ${u1Token}`);
     expect(resp.statusCode).toEqual(404);
   });

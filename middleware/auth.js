@@ -52,7 +52,7 @@ function ensureIsAdmin(req,res,next){
   try{
     const admin = res.locals.user.isAdmin
     if (!admin){throw new UnauthorizedError()};
-
+    
     return next();
 
   } catch (err) {
@@ -63,7 +63,9 @@ function ensureIsAdmin(req,res,next){
 
 function ensureAdminOrUser(req,res,next){
   try{
+    
     if(res.locals.user.username == req.params.username || res.locals.user.isAdmin){
+      
       return next()
     }
     throw new UnauthorizedError();

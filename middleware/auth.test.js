@@ -62,7 +62,7 @@ describe("ensureLoggedIn", function () {
   test("works", function () {
     expect.assertions(1);
     const req = {};
-    const res = { locals: { user: { username: "test", is_admin: false } } };
+    const res = { locals: { user: { username: "test", isAdmin: false } } };
     const next = function (err) {
       expect(err).toBeFalsy();
     };
@@ -83,7 +83,7 @@ describe("ensureLoggedIn", function () {
 describe("ensureIsAdmin",function () {
   test("not admin",  function(){
     const req = {}
-    const res = { locals: { user: { username: "test", is_admin: false } } };
+    const res = { locals: { user: { username: "test", isAdmin: false } } };
 
     const next = function (err) {
       expect(err instanceof UnauthorizedError).toBeTruthy();
@@ -94,7 +94,7 @@ describe("ensureIsAdmin",function () {
 
   test("is admin", function(){
     const req = {}
-    const res = { locals: { user: { username: "test", is_admin: true } } };
+    const res = { locals: { user: { username: "test", isAdmin: true} } };
 
     const next = function (err) {
       expect(err).toBeFalsy();

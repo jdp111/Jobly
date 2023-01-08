@@ -228,3 +228,44 @@ describe("remove", function () {
     }
   });
 });
+
+describe("apply", function (){
+
+  test("works", async function (){
+    let apply = await User.apply("u2",3);
+    expect(apply).toEqual({"job_id": 3});
+    const res = await db.query(
+      "SELECT * FROM applications WHERE username='u2'");
+    expect(res.rows).toEqual([{username: "u2", job_id: 3}]);
+  });
+
+  test("job doesn't exist", async function(){
+    try{
+    await User.apply("u2",5121);
+    }catch (err){ expect(err instanceof BadRequestError).toBeTruthy()}
+
+    const res = await db.query(
+      "SELECT * FROM applications WHERE job_id=5121");
+    expect(res.rows).toEqual([]);
+  });
+
+  test("user doesn't exist", async function(){
+    try{
+    await User.apply("notAvail",3);
+    }catch (err){  expect(err instanceof BadRequestError).toBeTruthy()};
+
+    const res = await db.query(
+      "SELECT * FROM applications WHERE username='notAvail'");
+    expect(res.rows).toEqual([]);
+  });
+
+  test("duplicate application", async function(){
+    try{
+      await User.apply("u3",3);
+    }catch (err){  expect(err instanceof BadRequestError).toBeTruthy()};
+    
+    const res = await db.query(
+      "SELECT * FROM applications WHERE username='notAvail'");
+    expect(res.rows).toEqual([]);
+  });
+});

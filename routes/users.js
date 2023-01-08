@@ -120,4 +120,18 @@ router.delete("/:username", ensureLoggedIn,ensureAdminOrUser, async function (re
 });
 
 
+router.post("/:username/jobs/:id", ensureLoggedIn, ensureAdminOrUser, async function(req,res,next){
+  try{
+    const jobID = parseInt(req.params.id);
+
+    if (!jobID){
+      throw new BadRequestError("job id must be an integer")
+    }
+    applied = await User.apply(req.params.username, req.params.id)
+    return res.json({applied})
+  }catch(err){
+    return next(err)
+  }
+})
+
 module.exports = router;

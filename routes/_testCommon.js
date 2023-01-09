@@ -121,6 +121,8 @@ async function commonBeforeAll() {
     equity:null,
     companyHandle: 'c1'
   });
+  await User.apply('u1',1)
+  await User.apply('u1',3)
 }
 
 async function commonBeforeEach() {

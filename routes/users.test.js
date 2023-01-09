@@ -206,6 +206,7 @@ describe("GET /users/:username", function () {
         email: "user2@user.com",
         isAdmin: false,
       },
+      jobs: []
     });
   });
 
@@ -221,6 +222,7 @@ describe("GET /users/:username", function () {
         email: "user2@user.com",
         isAdmin: false,
       },
+      jobs: []
     });
   });
 

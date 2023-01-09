@@ -127,8 +127,8 @@ router.post("/:username/jobs/:id", ensureLoggedIn, ensureAdminOrUser, async func
     if (!jobID){
       throw new BadRequestError("job id must be an integer")
     }
-    applied = await User.apply(req.params.username, req.params.id)
-    return res.json({applied})
+    const id = await User.apply(req.params.username, req.params.id)
+    return res.json({"applied": id.job_id})
   }catch(err){
     return next(err)
   }

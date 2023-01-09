@@ -409,3 +409,33 @@ describe("DELETE /users/:username", function () {
     expect(resp.statusCode).toEqual(404);
   });
 });
+
+
+
+describe("POST /users/:username/jobs/:id", function (){
+  test("works", async function(){
+    const resp = await request(app)
+      .post(`/users/u2/jobs/2`)
+      .set("authorization", `Bearer ${u1Token}`);
+    expect(resp.body).toEqual({applied: 2})
+  })
+
+  test("not valid username", async function(){
+    const resp = await request(app)
+      .post(`/users/u82/jobs/2`)
+      .set("authorization", `Bearer ${u1Token}`);
+    expect(resp.body.error).toEqual({
+      "message": "user with username: u82 does not exist",
+      "status": 400,})
+  })
+
+  test("not valid job id", async function(){
+    const resp = await request(app)
+      .post(`/users/u2/jobs/4242`)
+      .set("authorization", `Bearer ${u1Token}`);
+    expect(resp.body.error).toEqual({
+      "message": "job with id: 4242 does not exist",
+      "status": 400,})
+  })
+
+})
